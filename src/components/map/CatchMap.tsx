@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import L, { Map as LeafletMap, LayerGroup } from "leaflet";
+import L, { Map as LeafletMap, LayerGroup, DivIcon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,6 +8,26 @@ import { Award, Eye, Fish, Navigation, Users, Wifi, WifiOff } from "lucide-react
 import { cn } from "@/lib/utils";
 import { FishCatch, databaseService } from "@/services/database";
 import { sampleIndiaFishCatches } from "@/services/sampleData";
+
+// Available fish images for random markers
+const availableFishImages = [
+  '/fish/tuna.jpg',
+  '/fish/kingfish.jpg',
+  '/fish/pomfret.jpg',
+  '/fish/mackerel.jpg',
+  '/fish/sardine.jpg',
+  '/fish/seabass.jpg',
+  '/fish/snapper.jpg',
+  '/fish/grouper.jpg',
+  '/fish/redsnapper.jpg',
+  '/fish/seerfish.jpg',
+  '/fish/hilsa.jpg',
+  '/fish/indiansalmon.jpg'
+];
+
+const getRandomFishImage = () => {
+  return availableFishImages[Math.floor(Math.random() * availableFishImages.length)];
+};
 
 // Fix Leaflet default icon paths in Vite
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -66,8 +86,15 @@ export const CatchMap = ({ onCatchSelect, className }: CatchMapProps) => {
       center: [20.5937, 78.9629],
       zoom: 5,
       zoomControl: false,
-      attributionControl: false,
+      attributionControl: true,
     });
+    
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+    }).addTo(map);
+    
     mapRef.current = map;
     catchesLayerRef.current = L.layerGroup().addTo(map);
     return () => {
@@ -84,13 +111,71 @@ export const CatchMap = ({ onCatchSelect, className }: CatchMapProps) => {
     if (selectedFilter === "all") visible = [...catches, ...sampleFish];
     else if (selectedFilter === "mine") visible = catches;
     else visible = sampleFish;
+    
     visible.forEach((c) => {
       if (typeof c.latitude !== "number" || typeof c.longitude !== "number") return;
+      
+      // Determine image to use: user's original image or random fish image
+      const isUserCatch = catches.some(uc => uc.id === c.id);
+      const markerImage = isUserCatch ? c.image_data : getRandomFishImage();
+      
+      // Create custom icon with fish image
+      const customIcon = L.divIcon({
+        className: 'custom-fish-marker',
+        html: `
+          <div style="
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid #3b82f6;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: all 0.2s;
+          " class="fish-marker-icon">
+            <img src="${markerImage}" alt="${c.species}" style="
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            " />
+          </div>
+        `,
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+      });
+      
       const marker = L.marker([c.latitude, c.longitude], {
         title: c.species,
+        icon: customIcon,
       });
-      marker.on("mouseover", () => setHoveredCatch(c));
-      marker.on("mouseout", () => setHoveredCatch(null));
+      
+      marker.on("mouseover", (e) => {
+        setHoveredCatch(c);
+        const element = e.target.getElement();
+        if (element) {
+          const icon = element.querySelector('.fish-marker-icon');
+          if (icon) {
+            (icon as HTMLElement).style.transform = 'scale(1.3)';
+            (icon as HTMLElement).style.borderColor = '#06b6d4';
+            (icon as HTMLElement).style.zIndex = '1000';
+          }
+        }
+      });
+      
+      marker.on("mouseout", (e) => {
+        setHoveredCatch(null);
+        const element = e.target.getElement();
+        if (element) {
+          const icon = element.querySelector('.fish-marker-icon');
+          if (icon) {
+            (icon as HTMLElement).style.transform = 'scale(1)';
+            (icon as HTMLElement).style.borderColor = '#3b82f6';
+            (icon as HTMLElement).style.zIndex = '1';
+          }
+        }
+      });
+      
       marker.on("click", () => onCatchSelect?.(c));
       marker.addTo(group);
     });
