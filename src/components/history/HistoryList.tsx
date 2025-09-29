@@ -27,20 +27,32 @@ const HistoryList: React.FC<HistoryListProps> = ({ onCatchSelect, className }) =
     // Fetch catches from database (user and sample)
     const fetchCatches = async () => {
       const userCatches = await databaseService.getAllCatches();
-      setCatches([...userCatches, ...sampleIndiaFishCatches]);
-      // Load images for user catches (from IndexedDB)
+      const allCatches = [...userCatches, ...sampleIndiaFishCatches];
+      setCatches(allCatches);
+      
+      // Load images for all catches
       const urls: { [key: string]: string } = {};
+      
+      // Handle user catches
       for (const c of userCatches) {
-        if (c.image_data && typeof c.image_data === 'string' && !c.image_data.startsWith('data:image')) {
+        if (c.image_data && typeof c.image_data === 'string' && !c.image_data.startsWith('data:image') && !c.image_data.startsWith('/')) {
           // Try to load from IndexedDB
           const blob = await databaseService.getImage(c.image_data);
           if (blob) {
             urls[c.image_data] = URL.createObjectURL(blob);
           }
-        } else if (c.image_data && typeof c.image_data === 'string' && c.image_data.startsWith('data:image')) {
+        } else if (c.image_data && typeof c.image_data === 'string' && (c.image_data.startsWith('data:image') || c.image_data.startsWith('/'))) {
           urls[c.image_data] = c.image_data;
         }
       }
+      
+      // Handle sample data - they use direct paths
+      for (const c of sampleIndiaFishCatches) {
+        if (c.image_data && typeof c.image_data === 'string') {
+          urls[c.image_data] = c.image_data;
+        }
+      }
+      
       setImageUrls(urls);
     };
     fetchCatches();
