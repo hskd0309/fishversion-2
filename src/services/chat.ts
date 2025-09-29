@@ -75,12 +75,24 @@ class ChatService {
       }
     ];
 
+    // Store messages in localStorage for caching
+    const cachedMessages = localStorage.getItem('fishnet_chat_messages');
+    if (cachedMessages) {
+      try {
+        const parsed = JSON.parse(cachedMessages);
+        this.messages = new Map(Object.entries(parsed));
+      } catch (e) {
+        console.warn('Failed to load cached messages');
+      }
+    }
+
     // Create conversations
     sampleUsers.forEach((user, index) => {
       const conversationId = `conv_${user.id}`;
       const lastMessageTime = new Date(Date.now() - (index + 1) * 3600000).toISOString();
       
-      const lastMessage: ChatMessage = {
+      // Third conversation (index 2) will be empty - no messages
+      const lastMessage: ChatMessage | undefined = index === 2 ? undefined : {
         id: `msg_${conversationId}_last`,
         conversationId,
         senderId: user.id,
@@ -88,9 +100,7 @@ class ChatService {
         senderAvatar: user.avatar,
         text: index === 0 
           ? 'Hey! Did you catch anything today?' 
-          : index === 1 
-          ? 'That Pomfret looks amazing! Where did you catch it?' 
-          : 'Want to go fishing this weekend?',
+          : 'That Pomfret looks amazing! Where did you catch it?',
         timestamp: lastMessageTime,
         isRead: index === 0,
         isOffline: false
@@ -100,12 +110,12 @@ class ChatService {
         id: conversationId,
         otherUser: user,
         lastMessage,
-        unreadCount: index === 0 ? 0 : index,
+        unreadCount: index === 0 ? 0 : (index === 2 ? 0 : index),
         updatedAt: lastMessageTime
       });
 
-      // Initialize some messages for the first conversation
-      if (index === 0) {
+      // Initialize messages for first two conversations only
+      if (index === 0 && !cachedMessages) {
         const chatMessages: ChatMessage[] = [
           {
             id: 'msg1',
@@ -147,11 +157,38 @@ class ChatService {
             timestamp: new Date(Date.now() - 6000000).toISOString(),
             isRead: true
           },
-          lastMessage
+          lastMessage!
+        ];
+        this.messages.set(conversationId, chatMessages);
+      } else if (index === 1 && !cachedMessages) {
+        const chatMessages: ChatMessage[] = [
+          {
+            id: 'msg5',
+            conversationId,
+            senderId: user.id,
+            senderName: user.name,
+            senderAvatar: user.avatar,
+            text: 'Hi! I saw your recent catch post. That Pomfret looks amazing!',
+            timestamp: new Date(Date.now() - 5400000).toISOString(),
+            isRead: true
+          },
+          {
+            id: 'msg6',
+            conversationId,
+            senderId: currentUser.id,
+            senderName: currentUser.name,
+            senderAvatar: currentUser.avatar || '',
+            text: 'Thanks! It was a great morning catch at Marina Beach.',
+            timestamp: new Date(Date.now() - 5000000).toISOString(),
+            isRead: true
+          },
+          lastMessage!
         ];
         this.messages.set(conversationId, chatMessages);
       }
     });
+    
+    this.saveCachedMessages();
   }
 
   getConversations(): Conversation[] {
@@ -190,8 +227,18 @@ class ChatService {
     conversation.lastMessage = newMessage;
     conversation.updatedAt = newMessage.timestamp;
 
+    this.saveCachedMessages();
     this.notifyListeners();
     return newMessage;
+  }
+
+  private saveCachedMessages() {
+    try {
+      const messagesObj = Object.fromEntries(this.messages);
+      localStorage.setItem('fishnet_chat_messages', JSON.stringify(messagesObj));
+    } catch (e) {
+      console.warn('Failed to cache messages');
+    }
   }
 
   markAsRead(conversationId: string) {
