@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Wifi, WifiOff, Plus, RefreshCw, Users, MessageCircle } from 'lucide-react';
 import { PostCard } from '@/components/social/PostCard';
+import { ChatInterface } from '@/components/social/ChatInterface';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -287,17 +288,7 @@ export default function FeedPage() {
 
         {/* Chat Tab Content */}
         <TabsContent value="chat" className="mt-0">
-          <div className="container mx-auto max-w-md p-4">
-            <div className="text-center py-12" data-testid="chat-placeholder">
-              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="h-8 w-8 text-muted-foreground" />
-              </div>
-              <h3 className="text-lg font-semibold text-foreground mb-2">Chat Coming Soon</h3>
-              <p className="text-muted-foreground">
-                Direct messaging with fellow fishermen will be available soon!
-              </p>
-            </div>
-          </div>
+          <ChatInterface />
         </TabsContent>
       </Tabs>
     </div>
