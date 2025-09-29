@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Wifi, WifiOff, Plus, RefreshCw } from 'lucide-react';
+import { Wifi, WifiOff, Plus, RefreshCw, Users, MessageCircle } from 'lucide-react';
 import { PostCard } from '@/components/social/PostCard';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { socialService, SocialPost } from '@/services/social';
 import { authService } from '@/services/auth';
 import { syncService, SyncStatus } from '@/services/sync';
@@ -209,6 +210,7 @@ export default function FeedPage() {
             <Button 
               size="sm"
               className="bg-gradient-primary hover:opacity-90 text-white shadow-glow"
+              data-testid="button-new-post"
             >
               <Plus className="h-4 w-4 mr-1" />
               New Post
@@ -227,34 +229,77 @@ export default function FeedPage() {
         </div>
       )}
 
-      {/* Feed */}
-      <div className="container mx-auto max-w-md p-4 space-y-6">
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <PostCard
-              key={post.id}
-              post={post}
-              onLike={handleLike}
-              onComment={handleComment}
-              onShare={handleShare}
-              isLiked={isPostLiked(post.id)}
-            />
-          ))
-        ) : (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
-              <Plus className="h-8 w-8 text-muted-foreground" />
-            </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">No posts yet</h3>
-            <p className="text-muted-foreground mb-4">
-              Be the first to share your catch with the community!
-            </p>
-            <Button className="bg-gradient-primary hover:opacity-90 text-white">
-              Create Your First Post
-            </Button>
+      {/* Tabs for Community and Chat */}
+      <Tabs defaultValue="community" className="w-full">
+        <div className="sticky top-[73px] z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
+          <div className="container mx-auto max-w-md">
+            <TabsList className="w-full grid grid-cols-2 h-12 bg-muted/50" data-testid="tabs-social">
+              <TabsTrigger 
+                value="community" 
+                className="data-[state=active]:bg-gradient-primary data-[state=active]:text-white"
+                data-testid="tab-community"
+              >
+                <Users className="h-4 w-4 mr-2" />
+                Community
+              </TabsTrigger>
+              <TabsTrigger 
+                value="chat" 
+                className="data-[state=active]:bg-gradient-primary data-[state=active]:text-white"
+                data-testid="tab-chat"
+              >
+                <MessageCircle className="h-4 w-4 mr-2" />
+                Chat
+              </TabsTrigger>
+            </TabsList>
           </div>
-        )}
-      </div>
+        </div>
+
+        {/* Community Tab Content */}
+        <TabsContent value="community" className="mt-0">
+          <div className="container mx-auto max-w-md p-4 space-y-6">
+            {posts.length > 0 ? (
+              posts.map((post) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onLike={handleLike}
+                  onComment={handleComment}
+                  onShare={handleShare}
+                  isLiked={isPostLiked(post.id)}
+                />
+              ))
+            ) : (
+              <div className="text-center py-12" data-testid="empty-community">
+                <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">No posts yet</h3>
+                <p className="text-muted-foreground mb-4">
+                  Be the first to share your catch with the community!
+                </p>
+                <Button className="bg-gradient-primary hover:opacity-90 text-white" data-testid="button-first-post">
+                  Create Your First Post
+                </Button>
+              </div>
+            )}
+          </div>
+        </TabsContent>
+
+        {/* Chat Tab Content */}
+        <TabsContent value="chat" className="mt-0">
+          <div className="container mx-auto max-w-md p-4">
+            <div className="text-center py-12" data-testid="chat-placeholder">
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Chat Coming Soon</h3>
+              <p className="text-muted-foreground">
+                Direct messaging with fellow fishermen will be available soon!
+              </p>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
