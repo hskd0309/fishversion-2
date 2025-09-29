@@ -62,13 +62,17 @@ export const CameraCapture = ({ onImageCapture, onClose, className }: CameraCapt
     }
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type.startsWith('image/')) {
+      setIsLoading(true);
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
+        // Add 1.5 second loading state for better UX when uploading from device
+        await new Promise(resolve => setTimeout(resolve, 1500));
         const imageData = e.target?.result as string;
         setCapturedImage(imageData);
+        setIsLoading(false);
       };
       reader.readAsDataURL(file);
     }

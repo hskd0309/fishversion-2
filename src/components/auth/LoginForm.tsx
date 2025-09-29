@@ -27,6 +27,9 @@ export const LoginForm = () => {
     setIsLoading(true);
 
     try {
+      // Add 1 second loading state for better UX
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       let result;
       if (isLogin) {
         result = await authService.signIn(formData.email, formData.password);

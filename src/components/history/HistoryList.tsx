@@ -100,8 +100,9 @@ const HistoryList: React.FC<HistoryListProps> = ({ onCatchSelect, className }) =
             <Card 
               key={catch_data.id}
               className={cn(
-                "cursor-pointer transition-all hover:shadow-2xl hover:border-primary/60 flex flex-col items-center p-0 overflow-hidden bg-white rounded-2xl border-2 border-blue-100",
-                !catch_data.is_synced && "border-warning/50 bg-warning/5"
+                "cursor-pointer transition-all hover:shadow-2xl hover:border-primary/60 flex flex-col items-center p-0 overflow-hidden rounded-2xl border-2 border-blue-100",
+                "active:bg-gray-900 active:border-gray-700",
+                !catch_data.is_synced ? "border-warning/50 bg-warning/5" : "bg-white"
               )}
               style={{ minHeight: 480, maxWidth: 500, margin: '0 auto' }}
               onClick={() => onCatchSelect?.(catch_data)}

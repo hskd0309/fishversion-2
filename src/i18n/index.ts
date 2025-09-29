@@ -13,6 +13,7 @@ import mwr from './locales/mwr.json';
 import bn from './locales/bn.json';
 import pa from './locales/pa.json';
 import mr from './locales/mr.json';
+import or from './locales/or.json';
 
 const resources = {
   en: { translation: en },
@@ -26,6 +27,7 @@ const resources = {
   bn: { translation: bn },
   pa: { translation: pa },
   mr: { translation: mr },
+  or: { translation: or },
 };
 
 i18n
@@ -34,7 +36,7 @@ i18n
   .init({
     resources,
     fallbackLng: 'en',
-    supportedLngs: ['en', 'ta', 'te', 'hi', 'kn', 'ml', 'gu', 'mwr', 'bn', 'pa', 'mr'],
+    supportedLngs: ['en', 'ta', 'te', 'hi', 'kn', 'ml', 'gu', 'mwr', 'bn', 'pa', 'mr', 'or'],
     load: 'languageOnly',
     interpolation: {
       escapeValue: false,

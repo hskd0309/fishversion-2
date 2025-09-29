@@ -144,6 +144,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
     { code: 'bn', name: t('languages.bn') },
     { code: 'pa', name: t('languages.pa') },
     { code: 'mr', name: t('languages.mr') },
+    { code: 'or', name: t('languages.or') },
   ];
 
   return (
