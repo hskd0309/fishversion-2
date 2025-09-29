@@ -40,10 +40,15 @@ export default function HistoryPage() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-40 bg-card/80 backdrop-blur-md border-b border-border p-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-foreground flex items-center gap-2">
-            <History className="h-5 w-5" />
-            My Catches
-          </h1>
+          <div className="flex flex-col">
+            <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+              Fish Net
+            </h1>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <History className="h-3 w-3" />
+              My Catches
+            </p>
+          </div>
           <Button variant="outline" size="sm">
             <Filter className="h-4 w-4 mr-1" />
             Filter

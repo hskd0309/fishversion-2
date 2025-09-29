@@ -170,9 +170,12 @@ export default function FeedPage() {
       <header className="sticky top-0 z-40 bg-card/80 backdrop-blur-md border-b border-border">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              Fish Net
-            </h1>
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+                Fish Net
+              </h1>
+              <p className="text-xs text-muted-foreground">Feed</p>
+            </div>
             <Badge 
               variant={syncStatus.isOnline ? "default" : "secondary"}
               className={cn(

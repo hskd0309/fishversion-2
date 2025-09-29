@@ -92,7 +92,15 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-40 bg-card/80 backdrop-blur-md border-b border-border p-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-foreground">Profile</h1>
+          <div className="flex flex-col">
+            <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+              Fish Net
+            </h1>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <User className="h-3 w-3" />
+              Profile
+            </p>
+          </div>
           <Button variant="ghost" size="sm" onClick={() => setSettingsOpen(true)}>
             <Settings className="h-4 w-4" />
           </Button>
