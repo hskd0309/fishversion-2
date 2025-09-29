@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Eye, EyeOff, Fish, Mail, Lock, User } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -70,14 +70,9 @@ export const LoginForm = () => {
       
       <Card className="w-full max-w-md bg-card/80 backdrop-blur-md border border-border/50 shadow-float">
         <CardHeader className="text-center space-y-4">
-          <div className="flex items-center justify-center gap-3">
-            <div className="p-3 bg-gradient-primary rounded-2xl shadow-glow">
-              <Fish className="h-8 w-8 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              {t('app.name')}
-            </h1>
-          </div>
+          <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            Fish Net
+          </h1>
           
           <div>
             <CardTitle className="text-2xl font-bold text-foreground">
