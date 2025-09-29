@@ -7,11 +7,13 @@ import { Badge } from '@/components/ui/badge';
 import { authService } from '@/services/auth';
 import { socialService, type SocialPost } from '@/services/social';
 import { PostCard } from '@/components/social/PostCard';
+import { SettingsDialog } from '@/components/settings/SettingsDialog';
 
 export default function ProfilePage() {
   const [currentUser, setCurrentUser] = useState(authService.getState().user);
   const [userStats, setUserStats] = useState({ posts: 0, likes: 0 });
   const [userPosts, setUserPosts] = useState<SocialPost[]>([]);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const loadUserData = () => {
     if (currentUser) {
@@ -91,7 +93,7 @@ export default function ProfilePage() {
       <header className="sticky top-0 z-40 bg-card/80 backdrop-blur-md border-b border-border p-4">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-foreground">Profile</h1>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" onClick={() => setSettingsOpen(true)}>
             <Settings className="h-4 w-4" />
           </Button>
         </div>
@@ -187,6 +189,8 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
       </div>
+
+      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
     </div>
   );
 }
