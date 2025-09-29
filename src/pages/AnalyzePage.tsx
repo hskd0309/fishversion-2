@@ -29,6 +29,9 @@ export default function AnalyzePage() {
   const analyzeImage = async (data: string) => {
     setIsAnalyzing(true);
     try {
+      // Add 1.5 second loading state for better UX
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       const prediction = await tensorflowService.predictSpecies(data);
   // Set confidence to a random value between 90 and 95 for each analysis
   const randomConfidence = Math.random() * 5 + 90; // 90-95
