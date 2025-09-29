@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, Fish, Mail, Lock, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 export const LoginForm = () => {
+  const { t } = useTranslation();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,20 +36,20 @@ export const LoginForm = () => {
 
       if (result.success) {
         toast({
-          title: isLogin ? "Welcome back!" : "Account created!",
-          description: isLogin ? "You've successfully signed in." : "Welcome to Fish Net community!",
+          title: isLogin ? t('auth.welcomeBack') : t('common.success'),
+          description: isLogin ? t('auth.signInMessage') : t('auth.signUpMessage'),
         });
       } else {
         toast({
-          title: "Authentication failed",
+          title: t('common.error'),
           description: result.error,
           variant: "destructive",
         });
       }
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: t('common.error'),
+        description: t('common.error'),
         variant: "destructive",
       });
     } finally {
@@ -70,18 +72,18 @@ export const LoginForm = () => {
               <Fish className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              Fish Net
+              {t('app.name')}
             </h1>
           </div>
           
           <div>
             <CardTitle className="text-2xl font-bold text-foreground">
-              {isLogin ? 'Welcome Back' : 'Join Fish Net'}
+              {isLogin ? t('auth.welcomeBack') : t('auth.signUp')}
             </CardTitle>
             <CardDescription className="text-muted-foreground mt-2">
               {isLogin 
-                ? 'Sign in to continue your fishing journey' 
-                : 'Connect with anglers worldwide'}
+                ? t('auth.signInMessage') 
+                : t('auth.signUpMessage')}
             </CardDescription>
           </div>
         </CardHeader>
@@ -90,13 +92,13 @@ export const LoginForm = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-foreground">Full Name</Label>
+                <Label htmlFor="name" className="text-foreground">{t('auth.name')}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="name"
                     type="text"
-                    placeholder="Your full name"
+                    placeholder={t('auth.namePlaceholder')}
                     value={formData.name}
                     onChange={handleChange('name')}
                     className="pl-10 bg-background/50 border-border/50 focus:border-primary"
@@ -107,13 +109,13 @@ export const LoginForm = () => {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">Email</Label>
+              <Label htmlFor="email" className="text-foreground">{t('auth.email')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   value={formData.email}
                   onChange={handleChange('email')}
                   className="pl-10 bg-background/50 border-border/50 focus:border-primary"
@@ -123,13 +125,13 @@ export const LoginForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Password</Label>
+              <Label htmlFor="password" className="text-foreground">{t('auth.password')}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter your password"
+                  placeholder={t('auth.passwordPlaceholder')}
                   value={formData.password}
                   onChange={handleChange('password')}
                   className="pl-10 pr-10 bg-background/50 border-border/50 focus:border-primary"
@@ -163,16 +165,16 @@ export const LoginForm = () => {
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                  {isLogin ? 'Signing in...' : 'Creating account...'}
+                  {t('auth.loading')}
                 </div>
               ) : (
-                isLogin ? 'Sign In' : 'Create Account'
+                isLogin ? t('auth.signIn') : t('auth.signUp')
               )}
             </Button>
 
             <div className="text-center pt-4 border-t border-border/50">
               <p className="text-muted-foreground">
-                {isLogin ? "Don't have an account?" : "Already have an account?"}
+                {isLogin ? t('auth.noAccount') : t('auth.haveAccount')}
               </p>
               <Button
                 type="button"
@@ -180,7 +182,7 @@ export const LoginForm = () => {
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-primary hover:text-primary/80 font-semibold p-0 h-auto mt-1"
               >
-                {isLogin ? 'Sign up here' : 'Sign in instead'}
+                {isLogin ? t('auth.signUpHere') : t('auth.signInHere')}
               </Button>
             </div>
           </form>
