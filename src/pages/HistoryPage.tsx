@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { History, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { HistoryList } from '@/components/history/HistoryList';
+import HistoryList from '@/components/history/HistoryList';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { AnalysisResults } from '@/components/analyze/AnalysisResults';
 import { FishCatch, databaseService } from '@/services/database';
