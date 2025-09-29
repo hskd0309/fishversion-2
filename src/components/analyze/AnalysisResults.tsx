@@ -80,8 +80,8 @@ export const AnalysisResults = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `FishNet Analysis: ${result.species}`,
-          text: `I identified a ${result.species} with ${result.confidence.toFixed(1)}% confidence using FishNet AI!`,
+          title: `Fish Net Analysis: ${result.species}`,
+          text: `I identified a ${result.species} with ${result.confidence.toFixed(1)}% confidence using Fish Net AI!`,
           url: window.location.href,
         });
       } catch (error) {

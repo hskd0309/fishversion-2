@@ -1,4 +1,4 @@
-// FishNet Service Worker - Full Offline PWA Support
+// Fish Net Service Worker - Full Offline PWA Support
 const CACHE_NAME = 'fishnet-v1.2.1';
 const STATIC_CACHE = 'fishnet-static-v1.2.1';
 const DYNAMIC_CACHE = 'fishnet-dynamic-v1.2.1';
@@ -44,7 +44,7 @@ const CACHE_FIRST = [
 
 // Install event - cache static assets
 self.addEventListener('install', event => {
-  console.log('[SW] Installing FishNet Service Worker');
+  console.log('[SW] Installing Fish Net Service Worker');
   
   event.waitUntil(
     caches.open(STATIC_CACHE)
@@ -64,7 +64,7 @@ self.addEventListener('install', event => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', event => {
-  console.log('[SW] Activating FishNet Service Worker');
+  console.log('[SW] Activating Fish Net Service Worker');
   
   event.waitUntil(
     caches.keys()
@@ -303,7 +303,7 @@ self.addEventListener('push', event => {
     };
     
     event.waitUntil(
-      self.registration.showNotification(data.title || 'FishNet', options)
+      self.registration.showNotification(data.title || 'Fish Net', options)
     );
   }
 });
@@ -350,4 +350,4 @@ self.addEventListener('message', event => {
   }
 });
 
-console.log('[SW] FishNet Service Worker loaded successfully');
+console.log('[SW] Fish Net Service Worker loaded successfully');

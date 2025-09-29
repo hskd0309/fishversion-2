@@ -89,7 +89,7 @@ class AuthService {
       id: `user_${Date.now()}`,
       email,
       name,
-      bio: `Marine enthusiast and angler. Joined FishNet to share amazing catches!`,
+      bio: `Marine enthusiast and angler. Joined Fish Net to share amazing catches!`,
       joinDate: new Date().toISOString(),
       totalCatches: 0,
       favoriteSpecies: 'Unknown',

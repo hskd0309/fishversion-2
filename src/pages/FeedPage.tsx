@@ -121,7 +121,7 @@ export default function FeedPage() {
 
     if (navigator.share) {
       navigator.share({
-        title: `Check out this ${post.species} catch on FishNet!`,
+        title: `Check out this ${post.species} catch on Fish Net!`,
         text: post.caption,
         url: window.location.href,
       });
@@ -169,7 +169,7 @@ export default function FeedPage() {
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
             <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              FishNet
+              Fish Net
             </h1>
             <Badge 
               variant={syncStatus.isOnline ? "default" : "secondary"}

@@ -1,6 +1,6 @@
 {
-  "name": "FishNet - AI Fish Identification & Tracking",
-  "short_name": "FishNet",
+  "name": "Fish Net - AI Fish Identification & Tracking",
+  "short_name": "Fish Net",
   "description": "AI-powered fish species identification and catch tracking for fishermen and inspectors",
   "start_url": "/",
   "display": "standalone",

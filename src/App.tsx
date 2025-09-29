@@ -34,7 +34,7 @@ const App = () => {
         }
         
         // Initialize sync service (already done in constructor)
-        console.log('FishNet app initialized successfully');
+        console.log('Fish Net app initialized successfully');
       } catch (error) {
         console.warn('App initialization warning:', error);
       }

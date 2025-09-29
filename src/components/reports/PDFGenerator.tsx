@@ -28,7 +28,7 @@ export const PDFGenerator = ({ catch_data, onGenerated }: PDFGeneratorProps) => 
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(28);
       pdf.setFont(undefined, 'bold');
-      pdf.text('🐟 FishNet AI Analysis Report', pageWidth / 2, 25, { align: 'center' });
+      pdf.text('🐟 Fish Net AI Analysis Report', pageWidth / 2, 25, { align: 'center' });
       
       pdf.setFontSize(12);
       pdf.setFont(undefined, 'normal');

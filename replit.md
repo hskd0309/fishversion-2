@@ -1,7 +1,7 @@
-# FishNet Application
+# Fish Net Application
 
 ## Overview
-FishNet is a Progressive Web App (PWA) for fishermen to identify fish species using AI, track catches, view locations on maps, and maintain a history of their catches. Built with Vite, React, TypeScript, and shadcn/ui.
+Fish Net is a Progressive Web App (PWA) for fishermen to identify fish species using AI, track catches, view locations on maps, and maintain a history of their catches. Built with Vite, React, TypeScript, and shadcn/ui.
 
 ## Project Architecture
 

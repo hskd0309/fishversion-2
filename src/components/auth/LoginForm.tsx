@@ -35,7 +35,7 @@ export const LoginForm = () => {
       if (result.success) {
         toast({
           title: isLogin ? "Welcome back!" : "Account created!",
-          description: isLogin ? "You've successfully signed in." : "Welcome to FishNet community!",
+          description: isLogin ? "You've successfully signed in." : "Welcome to Fish Net community!",
         });
       } else {
         toast({
@@ -70,13 +70,13 @@ export const LoginForm = () => {
               <Fish className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              FishNet
+              Fish Net
             </h1>
           </div>
           
           <div>
             <CardTitle className="text-2xl font-bold text-foreground">
-              {isLogin ? 'Welcome Back' : 'Join FishNet'}
+              {isLogin ? 'Welcome Back' : 'Join Fish Net'}
             </CardTitle>
             <CardDescription className="text-muted-foreground mt-2">
               {isLogin 
