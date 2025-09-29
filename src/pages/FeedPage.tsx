@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Wifi, WifiOff, Plus, RefreshCw, Users, MessageCircle } from 'lucide-react';
+import { Wifi, WifiOff, RefreshCw, Users, MessageCircle } from 'lucide-react';
 import { PostCard } from '@/components/social/PostCard';
 import { ChatInterface } from '@/components/social/ChatInterface';
+import { NewPostDialog } from '@/components/social/NewPostDialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -208,14 +209,7 @@ export default function FeedPage() {
               <RefreshCw className={cn("h-4 w-4", isRefreshing && "animate-spin")} />
             </Button>
             
-            <Button 
-              size="sm"
-              className="bg-gradient-primary hover:opacity-90 text-white shadow-glow"
-              data-testid="button-new-post"
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              New Post
-            </Button>
+            <NewPostDialog onPostCreated={loadPosts} />
           </div>
         </div>
       </header>
