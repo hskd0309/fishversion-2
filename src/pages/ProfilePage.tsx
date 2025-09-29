@@ -5,28 +5,83 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { authService } from '@/services/auth';
-import { socialService } from '@/services/social';
+import { socialService, type SocialPost } from '@/services/social';
+import { PostCard } from '@/components/social/PostCard';
 
 export default function ProfilePage() {
   const [currentUser, setCurrentUser] = useState(authService.getState().user);
   const [userStats, setUserStats] = useState({ posts: 0, likes: 0 });
+  const [userPosts, setUserPosts] = useState<SocialPost[]>([]);
 
-  useEffect(() => {
-    const unsubscribe = authService.subscribe((state) => {
-      setCurrentUser(state.user);
-    });
-
+  const loadUserData = () => {
     if (currentUser) {
       const posts = socialService.getPostsByUser(currentUser.id);
       const totalLikes = posts.reduce((sum, post) => sum + post.likes, 0);
       setUserStats({ posts: posts.length, likes: totalLikes });
+      setUserPosts(posts);
     }
+  };
 
-    return unsubscribe;
+  useEffect(() => {
+    const unsubscribeAuth = authService.subscribe((state) => {
+      setCurrentUser(state.user);
+    });
+
+    const unsubscribeSocial = socialService.subscribe(() => {
+      loadUserData();
+    });
+
+    loadUserData();
+
+    return () => {
+      unsubscribeAuth();
+      unsubscribeSocial();
+    };
   }, [currentUser]);
 
   const handleSignOut = async () => {
     await authService.signOut();
+  };
+
+  const handleLike = (postId: string) => {
+    if (currentUser) {
+      socialService.toggleLike(postId, currentUser.id);
+    }
+  };
+
+  const handleComment = async (postId: string) => {
+    if (!currentUser) return;
+
+    // For demo, add a sample comment
+    try {
+      const sampleComments = [
+        "Great catch!",
+        "That's a beautiful fish!",
+        "Where did you catch this?",
+        "Amazing size!",
+      ];
+      
+      const randomComment = sampleComments[Math.floor(Math.random() * sampleComments.length)];
+      await socialService.addComment(postId, currentUser.id, currentUser, randomComment);
+    } catch (error) {
+      console.error('Failed to add comment:', error);
+    }
+  };
+
+  const handleShare = (postId: string) => {
+    const post = userPosts.find(p => p.id === postId);
+    if (!post) return;
+
+    if (navigator.share) {
+      navigator.share({
+        title: `Check out this ${post.species}!`,
+        text: post.caption,
+        url: window.location.href,
+      }).catch((error) => console.error('Error sharing:', error));
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      console.log('Link copied to clipboard!');
+    }
   };
 
   if (!currentUser) return null;
@@ -87,7 +142,7 @@ export default function ProfilePage() {
 
         {/* Actions */}
         <div className="space-y-3">
-          <Button variant="outline" className="w-full justify-start">
+          <Button variant="outline" className="w-full justify-start" data-testid="button-edit-profile">
             <User className="h-4 w-4 mr-2" />
             Edit Profile
           </Button>
@@ -96,11 +151,41 @@ export default function ProfilePage() {
             variant="outline" 
             className="w-full justify-start text-destructive hover:text-destructive"
             onClick={handleSignOut}
+            data-testid="button-sign-out"
           >
             <LogOut className="h-4 w-4 mr-2" />
             Sign Out
           </Button>
         </div>
+
+        {/* User Posts Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">My Posts</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {userPosts.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground" data-testid="text-no-posts">
+                <Fish className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                <p>No posts yet</p>
+                <p className="text-sm">Share your first catch!</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {userPosts.map((post) => (
+                  <PostCard 
+                    key={post.id} 
+                    post={post}
+                    onLike={handleLike}
+                    onComment={handleComment}
+                    onShare={handleShare}
+                    isLiked={post.likedBy?.includes(currentUser.id) || false}
+                  />
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
