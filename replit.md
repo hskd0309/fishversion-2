@@ -90,6 +90,20 @@ src/
 
 ## Recent Changes
 
+### UI Enhancement & Internationalization (2025-09-29)
+1. **Navigation Branding**: Updated all pages (Feed, My Catches, Profile) to display "Fish Net" branding consistently
+2. **Loading Screens**: Added loading states (1s for login/signup, 1.5s for image upload/analyze) for better UX
+3. **My Catches UI**: Fixed grid items to show dark background (active:bg-gray-900) when clicked
+4. **Personal Chat**: Enhanced chat service with 3 personal conversations (2 with messages, 1 empty) with localStorage caching
+5. **Real Fish Images**: Downloaded 30+ real fish photos and relocated from attached_assets to public/fish_images directory for proper Vite serving
+6. **Settings Dialog**: Implemented comprehensive settings with name change, location permissions, email display, and language selection with confirmation
+7. **Internationalization (i18n)**: Configured full i18n support with 12 languages:
+   - English (en) - base language
+   - Tamil (ta), Telugu (te), Hindi (hi), Kannada (kn), Malayalam (ml), Gujarati (gu), Marwadi (mwr), Bengali (bn), Punjabi (pa), Marathi (mr), Odia (or)
+   - Language selection persisted to localStorage
+   - Language change confirmation dialog
+8. **Image Management**: Updated sample data to use /fish_images/ paths from public directory
+
 ### GitHub Import Setup (2025-09-29)
 1. Installed npm dependencies (553 packages)
 2. Added `allowedHosts: ["*"]` to vite.config.ts for Replit proxy compatibility
