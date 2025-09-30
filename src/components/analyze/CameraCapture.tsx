@@ -34,8 +34,8 @@ export const CameraCapture = ({ onImageCapture, onClose, className }: CameraCapt
       }
     } catch (error) {
       console.error('Error accessing camera:', error);
-      // Fallback to file input if camera fails
-      fileInputRef.current?.click();
+      // Show error message instead of auto-opening file picker
+      alert('Camera access denied or not available. Please use the Upload button to select an image.');
     } finally {
       setIsLoading(false);
     }
@@ -136,11 +136,11 @@ export const CameraCapture = ({ onImageCapture, onClose, className }: CameraCapt
                 className="bg-black/50 hover:bg-black/70 text-white border-none"
               >
                 <Upload size={20} className="mr-2" />
-                Gallery
+                Upload
               </Button>
 
               <Button
-                onClick={videoRef.current ? capturePhoto : startCamera}
+                onClick={videoRef.current?.srcObject ? capturePhoto : startCamera}
                 disabled={isLoading}
                 className="w-16 h-16 rounded-full bg-primary hover:bg-primary-glow shadow-glow"
               >

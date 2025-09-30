@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Camera, Upload, Ruler } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CameraCapture } from '@/components/analyze/CameraCapture';
@@ -11,6 +12,7 @@ import { databaseService } from '@/services/database';
 import { toast } from '@/components/ui/use-toast';
 
 export default function AnalyzePage() {
+  const { t, language } = useLanguage();
   const [showCamera, setShowCamera] = useState(false);
   const [showCalibration, setShowCalibration] = useState(false);
   const [imageData, setImageData] = useState<string | null>(null);
@@ -186,14 +188,14 @@ export default function AnalyzePage() {
           <div className="absolute inset-0 bg-gradient-glow opacity-30 blur-3xl"></div>
           <div className="relative">
             <h1 className="text-3xl font-bold text-gradient mb-3 animate-fade-in">
-              🐟 AI Fish Scanner
+              🐟 {language === 'ta' ? 'AI மீன் ஸ்கேனர்' : 'AI Fish Scanner'}
             </h1>
             <p className="text-muted-foreground text-lg animate-slide-up">
-              Professional species identification powered by advanced AI models
+              {language === 'ta' ? 'மேம்பட்ட AI மாதிரிகளால் இயக்கப்படும் தொழில்முறை இன அடையாளம்' : 'Professional species identification powered by advanced AI models'}
             </p>
             <div className="mt-4 flex justify-center items-center gap-2 text-sm text-muted-foreground animate-scale-in">
               <div className="w-2 h-2 bg-success rounded-full animate-pulse-glow"></div>
-              <span>Real-time AI analysis • 50+ species</span>
+              <span>{language === 'ta' ? 'நேரடி AI பகுப்பாய்வு • 50+ இனங்கள்' : 'Real-time AI analysis • 50+ species'}</span>
             </div>
           </div>
         </div>
@@ -206,10 +208,10 @@ export default function AnalyzePage() {
               <div className="p-2 bg-gradient-primary rounded-lg">
                 <Camera className="h-6 w-6 text-white" />
               </div>
-              Professional Analysis
+              {language === 'ta' ? 'தொழில்முறை பகுப்பாய்வு' : 'Professional Analysis'}
             </CardTitle>
             <p className="text-muted-foreground">
-              Advanced neural network with confidence scoring and health assessment
+              {language === 'ta' ? 'நம்பிக்கை மதிப்பீடு மற்றும் ஆரோக்கிய மதிப்பீட்டுடன் மேம்பட்ட நரம்பியல் வலையமைப்பு' : 'Advanced neural network with confidence scoring and health assessment'}
             </p>
           </CardHeader>
           <CardContent className="space-y-4 relative">
@@ -222,12 +224,12 @@ export default function AnalyzePage() {
                 {isAnalyzing ? (
                   <>
                     <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    <span>Analyzing with AI...</span>
+                    <span>{t('analyze.analyzing')}</span>
                   </>
                 ) : (
                   <>
                     <Camera className="h-6 w-6" />
-                    <span>📸 Capture & Analyze</span>
+                    <span>📸 {language === 'ta' ? 'படம் எடுத்து பகுப்பாய்வு செய்' : 'Capture & Analyze'}</span>
                   </>
                 )}
               </div>
@@ -249,7 +251,7 @@ export default function AnalyzePage() {
               disabled={isAnalyzing}
             >
               <Upload className="h-5 w-5 mr-2" />
-              Upload from Gallery
+              {t('analyze.uploadFromDevice')}
             </Button>
           </CardContent>
         </Card>
@@ -258,23 +260,23 @@ export default function AnalyzePage() {
         <div className="grid grid-cols-2 gap-4 animate-fade-in">
           <Card className="card-mobile hover-scale text-center p-4">
             <div className="text-2xl mb-2">🎯</div>
-            <div className="font-semibold text-sm">95% Accuracy</div>
-            <div className="text-xs text-muted-foreground">AI Confidence</div>
+           <div className="font-semibold text-sm">{language === 'ta' ? '95% துல்லியம்' : '95% Accuracy'}</div>
+           <div className="text-xs text-muted-foreground">{language === 'ta' ? 'AI நம்பிக்கை' : 'AI Confidence'}</div>
           </Card>
           <Card className="card-mobile hover-scale text-center p-4">
             <div className="text-2xl mb-2">⚡</div>
-            <div className="font-semibold text-sm">Instant Results</div>
-            <div className="text-xs text-muted-foreground">Real-time Analysis</div>
+           <div className="font-semibold text-sm">{language === 'ta' ? 'உடனடி முடிவுகள்' : 'Instant Results'}</div>
+           <div className="text-xs text-muted-foreground">{language === 'ta' ? 'நேரடி பகுப்பாய்வு' : 'Real-time Analysis'}</div>
           </Card>
           <Card className="card-mobile hover-scale text-center p-4">
             <div className="text-2xl mb-2">💚</div>
-            <div className="font-semibold text-sm">Health Score</div>
-            <div className="text-xs text-muted-foreground">Freshness Check</div>
+           <div className="font-semibold text-sm">{language === 'ta' ? 'ஆரோக்கிய மதிப்பெண்' : 'Health Score'}</div>
+           <div className="text-xs text-muted-foreground">{language === 'ta' ? 'புத்தம் சோதனை' : 'Freshness Check'}</div>
           </Card>
           <Card className="card-mobile hover-scale text-center p-4">
             <div className="text-2xl mb-2">📏</div>
-            <div className="font-semibold text-sm">Size Estimation</div>
-            <div className="text-xs text-muted-foreground">Weight & Length</div>
+           <div className="font-semibold text-sm">{language === 'ta' ? 'அளவு மதிப்பீடு' : 'Size Estimation'}</div>
+           <div className="text-xs text-muted-foreground">{language === 'ta' ? 'எடை மற்றும் நீளம்' : 'Weight & Length'}</div>
           </Card>
         </div>
 
@@ -286,9 +288,9 @@ export default function AnalyzePage() {
                 <div className="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
                 <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
               </div>
-              <h3 className="text-lg font-semibold mb-2">AI Analysis in Progress</h3>
+              <h3 className="text-lg font-semibold mb-2">{language === 'ta' ? 'AI பகுப்பாய்வு நடைபெறுகிறது' : 'AI Analysis in Progress'}</h3>
               <p className="text-muted-foreground text-sm">
-                Processing neural networks...
+                {language === 'ta' ? 'நரம்பியல் வலையமைப்புகளை செயலாக்குகிறது...' : 'Processing neural networks...'}
               </p>
               <div className="mt-4 bg-muted rounded-full h-2 overflow-hidden">
                 <div className="bg-gradient-primary h-full animate-shimmer"></div>

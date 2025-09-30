@@ -41,6 +41,17 @@ class ChatService {
     const currentUser = authService.getState().user;
     if (!currentUser) return;
 
+    // Check if we already have cached conversations
+    const cachedConversations = localStorage.getItem('fishnet_chat_conversations');
+    if (cachedConversations) {
+      try {
+        const parsed = JSON.parse(cachedConversations);
+        this.conversations = new Map(Object.entries(parsed));
+        return;
+      } catch (e) {
+        console.warn('Failed to load cached conversations');
+      }
+    }
     // Sample fishermen to chat with
     const sampleUsers: User[] = [
       {
@@ -75,16 +86,7 @@ class ChatService {
       }
     ];
 
-    // Store messages in localStorage for caching
-    const cachedMessages = localStorage.getItem('fishnet_chat_messages');
-    if (cachedMessages) {
-      try {
-        const parsed = JSON.parse(cachedMessages);
-        this.messages = new Map(Object.entries(parsed));
-      } catch (e) {
-        console.warn('Failed to load cached messages');
-      }
-    }
+    this.loadCachedMessages();
 
     // Create conversations
     sampleUsers.forEach((user, index) => {
@@ -115,7 +117,7 @@ class ChatService {
       });
 
       // Initialize messages for first two conversations only
-      if (index === 0 && !cachedMessages) {
+      if (index === 0 && !this.messages.has(conversationId)) {
         const chatMessages: ChatMessage[] = [
           {
             id: 'msg1',
@@ -160,7 +162,7 @@ class ChatService {
           lastMessage!
         ];
         this.messages.set(conversationId, chatMessages);
-      } else if (index === 1 && !cachedMessages) {
+      } else if (index === 1 && !this.messages.has(conversationId)) {
         const chatMessages: ChatMessage[] = [
           {
             id: 'msg5',
@@ -185,12 +187,58 @@ class ChatService {
           lastMessage!
         ];
         this.messages.set(conversationId, chatMessages);
+      } else if (index === 2 && !this.messages.has(conversationId)) {
+        // Third conversation starts empty but add some sample messages for demo
+        const chatMessages: ChatMessage[] = [
+          {
+            id: 'msg_empty_1',
+            conversationId,
+            senderId: user.id,
+            senderName: user.name,
+            senderAvatar: user.avatar,
+            text: 'Hey! I heard you\'re an expert in deep sea fishing. Any tips for a beginner?',
+            timestamp: new Date(Date.now() - 1800000).toISOString(),
+            isRead: false
+          },
+          {
+            id: 'msg_empty_2',
+            conversationId,
+            senderId: currentUser.id,
+            senderName: currentUser.name,
+            senderAvatar: currentUser.avatar || '',
+            text: 'Sure! Start with the basics - good equipment and patience. What kind of fish are you targeting?',
+            timestamp: new Date(Date.now() - 1200000).toISOString(),
+            isRead: true
+          }
+        ];
+        this.messages.set(conversationId, chatMessages);
       }
     });
     
+    this.saveCachedConversations();
     this.saveCachedMessages();
   }
 
+  private loadCachedMessages() {
+    const cachedMessages = localStorage.getItem('fishnet_chat_messages');
+    if (cachedMessages) {
+      try {
+        const parsed = JSON.parse(cachedMessages);
+        this.messages = new Map(Object.entries(parsed));
+      } catch (e) {
+        console.warn('Failed to load cached messages');
+      }
+    }
+  }
+
+  private saveCachedConversations() {
+    try {
+      const conversationsObj = Object.fromEntries(this.conversations);
+      localStorage.setItem('fishnet_chat_conversations', JSON.stringify(conversationsObj));
+    } catch (e) {
+      console.warn('Failed to cache conversations');
+    }
+  }
   getConversations(): Conversation[] {
     return Array.from(this.conversations.values())
       .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());

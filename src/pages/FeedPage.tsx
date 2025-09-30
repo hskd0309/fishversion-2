@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Wifi, WifiOff, RefreshCw, Users } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { PostCard } from '@/components/social/PostCard';
 import { MessagesDialog } from '@/components/social/MessagesDialog';
 import { NewPostDialog } from '@/components/social/NewPostDialog';
@@ -12,6 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 export default function FeedPage() {
+  const { t } = useLanguage();
   const [posts, setPosts] = useState<SocialPost[]>([]);
   const [currentUser, setCurrentUser] = useState(authService.getState().user);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>(syncService.getStatus());
@@ -172,9 +174,9 @@ export default function FeedPage() {
           <div className="flex items-center gap-3">
             <div className="flex flex-col">
               <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                Fish Net
+                {t('app.name')}
               </h1>
-              <p className="text-xs text-muted-foreground">Feed</p>
+              <p className="text-xs text-muted-foreground">{t('feed.title')}</p>
             </div>
             <Badge 
               variant={syncStatus.isOnline ? "default" : "secondary"}
@@ -186,9 +188,9 @@ export default function FeedPage() {
               )}
             >
               {syncStatus.isOnline ? (
-                <><Wifi className="h-3 w-3 mr-1" /> Online</>
+                <><Wifi className="h-3 w-3 mr-1" /> {t('chat.online')}</>
               ) : (
-                <><WifiOff className="h-3 w-3 mr-1" /> Offline</>
+                <><WifiOff className="h-3 w-3 mr-1" /> {t('chat.offline')}</>
               )}
             </Badge>
             
@@ -246,12 +248,12 @@ export default function FeedPage() {
             <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
               <Users className="h-8 w-8 text-muted-foreground" />
             </div>
-            <h3 className="text-lg font-semibold text-foreground mb-2">No posts yet</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-2">{t('feed.noPosts')}</h3>
             <p className="text-muted-foreground mb-4">
-              Be the first to share your catch with the community!
+              {language === 'ta' ? 'சமூகத்துடன் உங்கள் பிடியைப் பகிர்ந்து கொள்ளுங்கள்!' : 'Be the first to share your catch with the community!'}
             </p>
             <Button className="bg-gradient-primary hover:opacity-90 text-white" data-testid="button-first-post">
-              Create Your First Post
+              {language === 'ta' ? 'உங்கள் முதல் இடுகையை உருவாக்குங்கள்' : 'Create Your First Post'}
             </Button>
           </div>
         )}

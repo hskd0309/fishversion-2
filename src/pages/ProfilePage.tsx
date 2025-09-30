@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { User, Settings, LogOut, Fish } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -10,6 +11,7 @@ import { PostCard } from '@/components/social/PostCard';
 import { SettingsDialog } from '@/components/settings/SettingsDialog';
 
 export default function ProfilePage() {
+  const { t } = useLanguage();
   const [currentUser, setCurrentUser] = useState(authService.getState().user);
   const [userStats, setUserStats] = useState({ posts: 0, likes: 0 });
   const [userPosts, setUserPosts] = useState<SocialPost[]>([]);
@@ -94,11 +96,11 @@ export default function ProfilePage() {
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              Fish Net
+             {t('app.name')}
             </h1>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
               <User className="h-3 w-3" />
-              Profile
+             {t('profile.title')}
             </p>
           </div>
           <Button variant="ghost" size="sm" onClick={() => setSettingsOpen(true)}>
@@ -130,21 +132,21 @@ export default function ProfilePage() {
               <div className="flex gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-foreground">{userStats.posts}</div>
-                  <div className="text-xs text-muted-foreground">Posts</div>
+                  <div className="text-xs text-muted-foreground">{t('profile.catches')}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-foreground">{userStats.likes}</div>
-                  <div className="text-xs text-muted-foreground">Likes</div>
+                  <div className="text-xs text-muted-foreground">{language === 'ta' ? 'விருப்பங்கள்' : 'Likes'}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-foreground">{currentUser.totalCatches}</div>
-                  <div className="text-xs text-muted-foreground">Total Catches</div>
+                  <div className="text-xs text-muted-foreground">{t('profile.totalCatches')}</div>
                 </div>
               </div>
 
               <Badge variant="secondary" className="flex items-center gap-1">
                 <Fish className="h-3 w-3" />
-                Favorite: {currentUser.favoriteSpecies}
+                {language === 'ta' ? 'விருப்பமான' : 'Favorite'}: {currentUser.favoriteSpecies}
               </Badge>
             </div>
           </CardContent>
@@ -154,7 +156,7 @@ export default function ProfilePage() {
         <div className="space-y-3">
           <Button variant="outline" className="w-full justify-start" data-testid="button-edit-profile">
             <User className="h-4 w-4 mr-2" />
-            Edit Profile
+            {t('profile.edit')}
           </Button>
           
           <Button 
@@ -164,21 +166,21 @@ export default function ProfilePage() {
             data-testid="button-sign-out"
           >
             <LogOut className="h-4 w-4 mr-2" />
-            Sign Out
+            {t('profile.signOut')}
           </Button>
         </div>
 
         {/* User Posts Section */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">My Posts</CardTitle>
+            <CardTitle className="text-lg">{language === 'ta' ? 'எனது இடுகைகள்' : 'My Posts'}</CardTitle>
           </CardHeader>
           <CardContent>
             {userPosts.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground" data-testid="text-no-posts">
                 <Fish className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                <p>No posts yet</p>
-                <p className="text-sm">Share your first catch!</p>
+                <p>{language === 'ta' ? 'இடுகைகள் இல்லை' : 'No posts yet'}</p>
+                <p className="text-sm">{language === 'ta' ? 'உங்கள் முதல் பிடியைப் பகிருங்கள்!' : 'Share your first catch!'}</p>
               </div>
             ) : (
               <div className="space-y-4">

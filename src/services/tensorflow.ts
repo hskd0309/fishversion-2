@@ -159,7 +159,7 @@ class TransformersService {
     // Always return Catla (Catla catla) for demo
     return {
       species: 'Catla (Catla catla)',
-  confidence: 93,
+      confidence: 93,
       healthScore: 95,
       estimatedWeight: 3.5,
       estimatedCount: 1
@@ -185,12 +185,7 @@ class TransformersService {
     if (Array.isArray(predictions) && predictions.length > 0) {
       // Use the top prediction and map it to a fish species
       const topPrediction = predictions[0];
-      // Only set confidence to 93% for analyzed/uploaded images, not for history/sample data
-      if (inputType === 'analyze' || inputType === 'upload') {
-        confidence = 93;
-      } else {
-        confidence = (topPrediction.score || 0.6) * 100;
-      }
+      confidence = (topPrediction.score || 0.6) * 100;
       
       // Simple mapping - in production you'd have a proper fish classifier
       species = this.mapToFishSpecies(topPrediction.label || '');
@@ -198,11 +193,7 @@ class TransformersService {
       // Fallback to random species
       const randomIndex = Math.floor(Math.random() * this.speciesLabels.length);
       species = this.speciesLabels[randomIndex];
-      if (inputType === 'analyze' || inputType === 'upload') {
-        confidence = 93;
-      } else {
-        confidence = 60 + Math.random() * 30; // 60-90%
-      }
+      confidence = 60 + Math.random() * 30; // 60-90%
     }
 
     return {
@@ -278,7 +269,7 @@ class TransformersService {
 
   private getFallbackPrediction(): PredictionResult {
     const randomIndex = Math.floor(Math.random() * this.speciesLabels.length);
-  const confidence = 60 + Math.random() * 30; // 60-90% confidence for history/sample
+    const confidence = 60 + Math.random() * 30; // 60-90% confidence for history/sample
     const species = this.speciesLabels[randomIndex];
     
     return {

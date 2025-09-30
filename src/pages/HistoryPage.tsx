@@ -1,6 +1,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { History, Filter } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import HistoryList from '@/components/history/HistoryList';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -10,6 +11,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 export default function HistoryPage() {
+  const { t } = useLanguage();
   const [selected, setSelected] = useState<FishCatch | null>(null);
   const [speciesHistory, setSpeciesHistory] = useState<FishCatch[]>([]);
 
@@ -42,16 +44,16 @@ export default function HistoryPage() {
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-              Fish Net
+              {t('app.name')}
             </h1>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
               <History className="h-3 w-3" />
-              My Catches
+              {t('history.title')}
             </p>
           </div>
           <Button variant="outline" size="sm">
             <Filter className="h-4 w-4 mr-1" />
-            Filter
+            {t('common.search')}
           </Button>
         </div>
       </header>

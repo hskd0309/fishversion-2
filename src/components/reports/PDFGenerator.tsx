@@ -28,7 +28,7 @@ export const PDFGenerator = ({ catch_data, onGenerated }: PDFGeneratorProps) => 
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(28);
       pdf.setFont(undefined, 'bold');
-      pdf.text('🐟 Fish Net AI Analysis Report', pageWidth / 2, 25, { align: 'center' });
+      pdf.text('Fish Net AI Analysis Report', pageWidth / 2, 25, { align: 'center' });
       
       pdf.setFontSize(12);
       pdf.setFont(undefined, 'normal');
@@ -54,46 +54,43 @@ export const PDFGenerator = ({ catch_data, onGenerated }: PDFGeneratorProps) => 
       yPos += 20;
       pdf.setDrawColor(200, 200, 200);
       pdf.setLineWidth(1);
-      pdf.rect(20, yPos, pageWidth - 40, 80);
+      const imageWidth = pageWidth - 40;
+      const imageHeight = 60;
+      pdf.rect(20, yPos, imageWidth, imageHeight);
       
       pdf.setFillColor(245, 245, 245);
-      pdf.rect(21, yPos + 1, pageWidth - 42, 78, 'F');
+      pdf.rect(21, yPos + 1, imageWidth - 2, imageHeight - 2, 'F');
       
       pdf.setFontSize(14);
       pdf.setTextColor(100, 100, 100);
-      pdf.text('📸 Fish Photograph', pageWidth / 2, yPos + 25, { align: 'center' });
+      pdf.text('Fish Photograph', pageWidth / 2, yPos + 20, { align: 'center' });
       pdf.setFontSize(10);
-      pdf.text('(Original image captured during analysis)', pageWidth / 2, yPos + 35, { align: 'center' });
+      pdf.text('(Original image captured during analysis)', pageWidth / 2, yPos + 30, { align: 'center' });
       
       // Species Identification Section
-      yPos += 100;
+      yPos += 80;
       pdf.setFillColor(240, 248, 255);
-      pdf.rect(15, yPos, pageWidth - 30, 45, 'F');
+      pdf.rect(15, yPos, pageWidth - 30, 40, 'F');
       
       pdf.setTextColor(20, 89, 158);
       pdf.setFontSize(18);
       pdf.setFont(undefined, 'bold');
-      pdf.text('🎯 Species Identification', 20, yPos + 15);
+      pdf.text('Species Identification', 20, yPos + 15);
       
       pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(24);
       pdf.setFont(undefined, 'bold');
       pdf.text(catch_data.species, 20, yPos + 30);
       
-      pdf.setFontSize(12);
-      pdf.setFont(undefined, 'normal');
-      pdf.setTextColor(100, 100, 100);
-      pdf.text(`Scientific classification based on AI neural network analysis`, 20, yPos + 40);
-      
       // Analysis Metrics Section
-      yPos += 60;
+      yPos += 50;
       pdf.setFillColor(248, 250, 252);
-      pdf.rect(15, yPos, pageWidth - 30, 70, 'F');
+      pdf.rect(15, yPos, pageWidth - 30, 60, 'F');
       
       pdf.setTextColor(20, 89, 158);
       pdf.setFontSize(16);
       pdf.setFont(undefined, 'bold');
-      pdf.text('📊 AI Analysis Metrics', 20, yPos + 15);
+      pdf.text('AI Analysis Metrics', 20, yPos + 15);
       
       // Metrics in two columns
       const leftCol = 25;
@@ -107,14 +104,13 @@ export const PDFGenerator = ({ catch_data, onGenerated }: PDFGeneratorProps) => 
       const leftMetrics = [
         ['Confidence Score:', `${catch_data.confidence.toFixed(1)}%`],
         ['Health/Freshness:', `${catch_data.health_score.toFixed(1)}%`],
-        ['Quality Rating:', `${(0.6 * catch_data.health_score + 0.4 * catch_data.confidence).toFixed(1)}%`]
       ];
       
       leftMetrics.forEach(([label, value]) => {
         pdf.setFont(undefined, 'bold');
         pdf.text(label, leftCol, metricY);
         pdf.setFont(undefined, 'normal');
-        pdf.text(value, leftCol + 45, metricY);
+        pdf.text(value, leftCol + 50, metricY);
         metricY += 10;
       });
       
@@ -123,27 +119,26 @@ export const PDFGenerator = ({ catch_data, onGenerated }: PDFGeneratorProps) => 
       const rightMetrics = [
         ['Estimated Weight:', `${catch_data.estimated_weight.toFixed(2)} kg`],
         ['Fish Count:', catch_data.count.toString()],
-        ['Analysis Method:', 'TensorFlow Lite CNN']
       ];
       
       rightMetrics.forEach(([label, value]) => {
         pdf.setFont(undefined, 'bold');
         pdf.text(label, rightCol, metricY);
         pdf.setFont(undefined, 'normal');
-        pdf.text(value, rightCol + 45, metricY);
+        pdf.text(value, rightCol + 50, metricY);
         metricY += 10;
       });
       
       // Location & Time Section
       if (catch_data.latitude !== 0 || catch_data.longitude !== 0) {
-        yPos += 85;
+        yPos += 75;
         pdf.setFillColor(240, 253, 244);
-        pdf.rect(15, yPos, pageWidth - 30, 50, 'F');
+        pdf.rect(15, yPos, pageWidth - 30, 45, 'F');
         
         pdf.setTextColor(5, 150, 105);
         pdf.setFontSize(16);
         pdf.setFont(undefined, 'bold');
-        pdf.text('📍 Location & Timing', 20, yPos + 15);
+        pdf.text('Location & Timing', 20, yPos + 15);
         
         pdf.setTextColor(0, 0, 0);
         pdf.setFontSize(11);
@@ -155,7 +150,6 @@ export const PDFGenerator = ({ catch_data, onGenerated }: PDFGeneratorProps) => 
           })],
           ['Capture Time:', new Date(catch_data.timestamp).toLocaleTimeString('en-US')],
           ['GPS Coordinates:', `${catch_data.latitude.toFixed(6)}, ${catch_data.longitude.toFixed(6)}`],
-          ['Location Accuracy:', 'High precision GPS']
         ];
         
         let locY = yPos + 30;
@@ -163,42 +157,13 @@ export const PDFGenerator = ({ catch_data, onGenerated }: PDFGeneratorProps) => 
           pdf.setFont(undefined, 'bold');
           pdf.text(label, 20, locY);
           pdf.setFont(undefined, 'normal');
-          pdf.text(value, 70, locY);
+          pdf.text(value, 80, locY);
           locY += 8;
         });
       }
       
-      // Technical Details Section
-      yPos += 65;
-      pdf.setFillColor(254, 243, 199);
-      pdf.rect(15, yPos, pageWidth - 30, 55, 'F');
-      
-      pdf.setTextColor(180, 83, 9);
-      pdf.setFontSize(14);
-      pdf.setFont(undefined, 'bold');
-      pdf.text('🔬 Technical Analysis Details', 20, yPos + 15);
-      
-      pdf.setFontSize(9);
-      pdf.setFont(undefined, 'normal');
-      pdf.setTextColor(0, 0, 0);
-      
-      const technicalNotes = [
-        '• Deep learning model trained on 50,000+ fish images from marine databases',
-        '• Multi-layer convolutional neural network with 95% accuracy on test dataset',
-        '• Real-time inference performed on-device for privacy and offline capability',
-        '• Health assessment based on color analysis, texture patterns, and eye clarity',
-        '• Weight estimation uses species-specific morphometric relationships',
-        '• GPS coordinates captured with sub-meter accuracy when available'
-      ];
-      
-      let techY = yPos + 25;
-      technicalNotes.forEach(note => {
-        pdf.text(note, 20, techY);
-        techY += 7;
-      });
-      
       // Confidence Visualization (Simple bar chart)
-      yPos += 70;
+      yPos += 60;
       pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(12);
       pdf.setFont(undefined, 'bold');
@@ -237,9 +202,9 @@ export const PDFGenerator = ({ catch_data, onGenerated }: PDFGeneratorProps) => 
       
       pdf.setFontSize(8);
       pdf.setTextColor(100, 100, 100);
-      pdf.text('FishNet - AI-Powered Fish Identification & Tracking System', 20, footerY - 5);
+      pdf.text('Fish Net - AI-Powered Fish Identification & Tracking System', 20, footerY - 5);
       pdf.text(`Report ID: FISH-${Date.now()}`, 20, footerY);
-      pdf.text('https://fishnet.app', pageWidth - 20, footerY, { align: 'right' });
+      pdf.text('Generated by Fish Net App', pageWidth - 20, footerY, { align: 'right' });
       
       // Generate and handle the PDF
       const pdfBlob = pdf.output('blob');

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Dialog,
   DialogContent,
@@ -39,7 +39,7 @@ interface SettingsDialogProps {
 }
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
-  const { t, i18n } = useTranslation();
+  const { t, language, setLanguage } = useLanguage();
   const currentUser = authService.getState().user;
   
   const [name, setName] = useState(currentUser?.name || '');
@@ -47,7 +47,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   const [locationEnabled, setLocationEnabled] = useState(false);
   const [locationPermissionState, setLocationPermissionState] = useState<string>('unknown');
   const [currentLocation, setCurrentLocation] = useState<string>('');
-  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
+  const [selectedLanguage, setSelectedLanguage] = useState(language);
   const [showLanguageConfirm, setShowLanguageConfirm] = useState(false);
   const [pendingLanguage, setPendingLanguage] = useState('');
   const [isRequestingLocation, setIsRequestingLocation] = useState(false);
@@ -101,16 +101,19 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   };
 
   const handleLanguageChange = (value: string) => {
-    setPendingLanguage(value);
-    setShowLanguageConfirm(true);
+    if (value === 'ta') {
+      setPendingLanguage(value);
+      setShowLanguageConfirm(true);
+    } else {
+      // For English, change immediately
+      setLanguage('en');
+      setSelectedLanguage('en');
+    }
   };
 
   const confirmLanguageChange = async () => {
-    await preferencesService.setLanguage(pendingLanguage);
-    await i18n.changeLanguage(pendingLanguage);
-    setSelectedLanguage(pendingLanguage);
+    setLanguage(pendingLanguage as 'en' | 'ta');
     setShowLanguageConfirm(false);
-    toast.success(t('settings.languageChanged'));
   };
 
   const handleSave = async () => {
@@ -133,18 +136,8 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   };
 
   const languages = [
-    { code: 'en', name: t('languages.en') },
-    { code: 'ta', name: t('languages.ta') },
-    { code: 'te', name: t('languages.te') },
-    { code: 'hi', name: t('languages.hi') },
-    { code: 'kn', name: t('languages.kn') },
-    { code: 'ml', name: t('languages.ml') },
-    { code: 'gu', name: t('languages.gu') },
-    { code: 'mwr', name: t('languages.mwr') },
-    { code: 'bn', name: t('languages.bn') },
-    { code: 'pa', name: t('languages.pa') },
-    { code: 'mr', name: t('languages.mr') },
-    { code: 'or', name: t('languages.or') },
+    { code: 'en', name: 'English' },
+    { code: 'ta', name: 'தமிழ்' },
   ];
 
   return (
@@ -287,9 +280,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>{t('settings.confirmLanguage')}</AlertDialogTitle>
             <AlertDialogDescription>
-              {t('settings.confirmLanguageMessage', { 
-                language: languages.find(l => l.code === pendingLanguage)?.name || pendingLanguage 
-              })}
+              {t('settings.confirmLanguageMessage')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

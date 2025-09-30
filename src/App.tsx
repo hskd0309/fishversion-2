@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { MobileLayout } from "@/components/layout/MobileLayout";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
@@ -44,27 +45,29 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Toaster />
-      <Sonner />
-      <OfflineIndicator />
-      <AuthGuard>
-        <BrowserRouter>
-          <MobileLayout>
-            <Routes>
-              <Route path="/" element={<FeedPage />} />
-              <Route path="/analyze" element={<AnalyzePage />} />
-              <Route path="/map" element={<MapPage />} />
-              <Route path="/history" element={<HistoryPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/species" element={<SpeciesPage />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <BottomNavigation />
-          </MobileLayout>
-        </BrowserRouter>
-      </AuthGuard>
-    </QueryClientProvider>
+    <LanguageProvider>
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        <Sonner />
+        <OfflineIndicator />
+        <AuthGuard>
+          <BrowserRouter>
+            <MobileLayout>
+              <Routes>
+                <Route path="/" element={<FeedPage />} />
+                <Route path="/analyze" element={<AnalyzePage />} />
+                <Route path="/map" element={<MapPage />} />
+                <Route path="/history" element={<HistoryPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/species" element={<SpeciesPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <BottomNavigation />
+            </MobileLayout>
+          </BrowserRouter>
+        </AuthGuard>
+      </QueryClientProvider>
+    </LanguageProvider>
   );
 };
 

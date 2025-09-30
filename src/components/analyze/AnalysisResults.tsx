@@ -80,16 +80,32 @@ export const AnalysisResults = ({
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Fish Net Analysis: ${result.species}`,
-          text: `I identified a ${result.species} with ${result.confidence.toFixed(1)}% confidence using Fish Net AI!`,
+          title: `Fish Net: ${result.species}`,
+          text: `I caught a ${result.species} with ${result.confidence.toFixed(1)}% confidence! 🐟`,
           url: window.location.href,
         });
       } catch (error) {
-        console.log('Share cancelled or failed');
+        // User cancelled or share failed
+        if (error.name !== 'AbortError') {
+          // Fallback to copying link
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            alert('Link copied to clipboard!');
+          } catch {
+            alert('Unable to share. Please copy the URL manually.');
+          }
+        }
       }
     } else {
-      // Fallback to copying URL
-      navigator.clipboard.writeText(window.location.href);
+      // Fallback for browsers without Web Share API
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+      } catch {
+        // Show a dialog with the URL if clipboard fails
+        const url = window.location.href;
+        prompt('Copy this link to share:', url);
+      }
     }
   };
 

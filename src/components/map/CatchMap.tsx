@@ -152,28 +152,12 @@ export const CatchMap = ({ onCatchSelect, className }: CatchMapProps) => {
       
       marker.on("mouseover", (e) => {
         setHoveredCatch(c);
-        const element = e.target.getElement();
-        if (element) {
-          const icon = element.querySelector('.fish-marker-icon');
-          if (icon) {
-            (icon as HTMLElement).style.transform = 'scale(1.3)';
-            (icon as HTMLElement).style.borderColor = '#06b6d4';
-            (icon as HTMLElement).style.zIndex = '1000';
-          }
-        }
+        // Remove hover scaling to keep consistent appearance
       });
       
       marker.on("mouseout", (e) => {
         setHoveredCatch(null);
-        const element = e.target.getElement();
-        if (element) {
-          const icon = element.querySelector('.fish-marker-icon');
-          if (icon) {
-            (icon as HTMLElement).style.transform = 'scale(1)';
-            (icon as HTMLElement).style.borderColor = '#3b82f6';
-            (icon as HTMLElement).style.zIndex = '1';
-          }
-        }
+        // Remove hover scaling to keep consistent appearance
       });
       
       marker.on("click", () => onCatchSelect?.(c));

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 export const LoginForm = () => {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,7 +71,7 @@ export const LoginForm = () => {
       <Card className="w-full max-w-md bg-card/80 backdrop-blur-md border border-border/50 shadow-float">
         <CardHeader className="text-center space-y-4">
           <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-            Fish Net
+            {t('app.name')}
           </h1>
           
           <div>
