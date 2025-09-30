@@ -1,4 +1,4 @@
-import { Home, Camera, Map, History, User } from 'lucide-react';
+import { Chrome as Home, Camera, Map, History, User } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { cn } from '@/lib/utils';

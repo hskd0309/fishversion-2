@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { MapPin, Globe, User, Mail, Loader2, Check, X } from 'lucide-react';
+import { MapPin, Globe, User, Mail, Loader as Loader2, Check, X } from 'lucide-react';
 import { authService } from '@/services/auth';
 import { preferencesService } from '@/services/preferences';
 import { toast } from 'sonner';
