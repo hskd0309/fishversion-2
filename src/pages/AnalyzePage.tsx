@@ -104,7 +104,7 @@ export default function AnalyzePage() {
 
   if (imageData && result) {
     return (
-      <div className="min-h-screen bg-background p-4">
+      <div className="h-screen bg-background p-4">
         <div className="container mx-auto max-w-md space-y-3">
           {/* Top Back Button */}
           <div className="flex items-center mb-2">

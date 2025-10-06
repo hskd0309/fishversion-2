@@ -104,18 +104,18 @@ export const PostCard = ({
           </Badge>
         </div>
 
-        {/* Confidence Badge */}
+        {/* Confidence Badge
         <div className="absolute top-4 right-4">
           <Badge 
             variant="secondary" 
             className={cn(
-              "bg-black/70 backdrop-blur-sm border-white/20",
+              "bg-blackx/70 backdrop-blur-sm border-white/20",
               getConfidenceColor(post.confidence)
             )}
           >
             {post.confidence}% confident
           </Badge>
-        </div>
+        </div> */}
       </div>
 
       {/* Post Stats */}

@@ -93,7 +93,7 @@ export default function ProfilePage() {
       <header className="sticky top-0 z-40 bg-card/80 backdrop-blur-md border-b border-border p-4">
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold text-sky-400">
               Fish Net
             </h1>
             <p className="text-xs text-muted-foreground flex items-center gap-1">

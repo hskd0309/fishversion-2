@@ -10,11 +10,11 @@ export default defineConfig(({ mode }) => ({
     port: 5000,
     strictPort: true,
     allowedHosts: ["*"],
-    hmr: {
-      protocol: 'wss',
-      host: process.env.REPLIT_DEV_DOMAIN,
-      clientPort: 443,
-    },
+    // hmr: {
+    //   protocol: 'wss',
+    //   host: process.env.REPLIT_DEV_DOMAIN,
+    //   clientPort: 443,
+    // },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
