@@ -9,6 +9,8 @@ import { ExplainabilityOverlay } from '@/components/analyze/ExplainabilityOverla
 import { tensorflowService, type PredictionResult } from '@/services/tensorflow';
 import { databaseService } from '@/services/database';
 import { toast } from '@/components/ui/use-toast';
+// ✅ added for offline cache
+import { addLocalCatch } from "@/utils/localCatches";
 
 export default function AnalyzePage() {
   const [showCamera, setShowCamera] = useState(false);
@@ -53,27 +55,42 @@ export default function AnalyzePage() {
   };
 
   const handleSave = async () => {
-    if (!imageData || !result) return;
-    try {
-      await databaseService.initialize?.();
-      await databaseService.addCatch({
-        species: result.species,
-        confidence: result.confidence,
-        health_score: result.healthScore,
-        estimated_weight: result.estimatedWeight,
-        count: result.estimatedCount,
-        timestamp: new Date().toISOString(),
-        latitude: location?.latitude ?? 0,
-        longitude: location?.longitude ?? 0,
-        image_data: imageData,
-        is_synced: false,
-      });
-      toast({ title: 'Saved', description: 'Catch saved to history.' });
-    } catch (e) {
-      console.error(e);
-      toast({ title: 'Save failed', description: 'Could not save catch.' });
-    }
-  };
+  if (!imageData || !result) return;
+  try {
+    await databaseService.initialize?.();
+
+    // ✅ call addLocalCatch BEFORE saving to DB or AFTER — but OUTSIDE the {}
+    addLocalCatch({
+      id: "local-" + Date.now(),
+      createdAt: Date.now(),
+      species: result.species || "Unknown",
+      image: imageData,
+      lat: location?.latitude ?? 0,
+      lng: location?.longitude ?? 0,
+      healthScore: result.healthScore,
+      confidence: result.confidence,
+    });
+
+    await databaseService.addCatch({
+      species: result.species,
+      confidence: result.confidence,
+      health_score: result.healthScore,
+      estimated_weight: result.estimatedWeight,
+      count: result.estimatedCount,
+      timestamp: new Date().toISOString(),
+      latitude: location?.latitude ?? 0,
+      longitude: location?.longitude ?? 0,
+      image_data: imageData,
+      is_synced: false,
+    });
+
+    toast({ title: 'Saved', description: 'Catch saved to history.' });
+  } catch (e) {
+    console.error(e);
+    toast({ title: 'Save failed', description: 'Could not save catch.' });
+  }
+};
+
 
   if (showCamera) {
     return (
@@ -104,7 +121,7 @@ export default function AnalyzePage() {
 
   if (imageData && result) {
     return (
-      <div className="h-screen bg-background p-4">
+      <div className="min-h-screen bg-background p-4">
         <div className="container mx-auto max-w-md space-y-3">
           {/* Top Back Button */}
           <div className="flex items-center mb-2">

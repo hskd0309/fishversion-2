@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { loadLocalCatches } from "@/utils/localCatches";
 import { motion, AnimatePresence } from "framer-motion";
 // Import Leaflet from npm (you installed it with `npm install leaflet`)
 import L from "leaflet";
@@ -134,8 +135,22 @@ export const CatchMap = ({ onCatchSelect, className }: CatchMapProps) => {
 
   useEffect(() => {
     const loadData = async () => {
+      // Load local catches from localStorage
+      const localCatches = loadLocalCatches().map((lc) => ({
+        id: lc.id,
+        species: lc.species,
+        confidence: lc.confidence ?? 0,
+        latitude: lc.lat,
+        longitude: lc.lng,
+        timestamp: new Date(lc.createdAt).toISOString(),
+        image_data: lc.image,
+        health_score: lc.healthScore ?? 0,
+        estimated_weight: 0,
+        is_synced: false,
+      }));
+
       const userCatches = await databaseService.getAllCatches();
-      setCatches(userCatches);
+      setCatches([...localCatches, ...userCatches]);
       setSampleFish(sampleIndiaFishCatches);
     };
     loadData();
@@ -214,8 +229,8 @@ export const CatchMap = ({ onCatchSelect, className }: CatchMapProps) => {
       if (typeof c.latitude !== "number" || typeof c.longitude !== "number")
         return;
 
-      const isUserCatch = catches.some((uc) => uc.id === c.id);
-      const markerImage = c.image_data;
+  const isUserCatch = catches.some((uc) => uc.id === c.id);
+  const markerImage = c.image_data;
 
       const borderColor = isUserCatch ? "#f59e0b" : "#0ea5e9";
       const shadowColor = isUserCatch

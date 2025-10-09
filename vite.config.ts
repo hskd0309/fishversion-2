@@ -1,20 +1,20 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import fs from "fs";                    // 👈 add this
 import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
-    host: "0.0.0.0",
-    port: 5000,
+    host: "0.0.0.0",                    // lets other devices connect
+    port: 5700,
     strictPort: true,
     allowedHosts: ["*"],
-    // hmr: {
-    //   protocol: 'wss',
-    //   host: process.env.REPLIT_DEV_DOMAIN,
-    //   clientPort: 443,
-    // },
+    https: {                           // 👈 add this block
+      key: fs.readFileSync("./192.168.0.5-key.pem"),
+      cert: fs.readFileSync("./192.168.0.5.pem")
+    }
+    // no need for the old HMR section unless you really want Replit hot reload
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
@@ -23,9 +23,9 @@ export default defineConfig(({ mode }) => ({
     },
   },
   optimizeDeps: {
-    exclude: ['sql.js'],
+    exclude: ["sql.js"],
   },
   define: {
-    global: 'globalThis',
+    global: "globalThis",
   },
 }));
